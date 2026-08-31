@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SkyStrike - Game Bắn Máy Bay Ma Trận 10x10 Online (Code Cracker Style)">
+  <title>SkyStrike - Bắn Máy Bay 10x10</title>
+  <link rel="icon" type="image/jpeg" href="favicon.png">
+  <link rel="shortcut icon" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="app">
+
+    <!-- MENU SCREEN (Code Cracker Style) -->
+    <div id="menu-screen" class="screen active">
+      <div class="menu-wrap">
+        
+        <!-- Brand Header -->
+        <div class="brand">
+          <div class="brand-tiles" id="brand-tiles">
+            <span class="brand-tile tile-s">S</span>
+            <span class="brand-tile tile-k">K</span>
+            <span class="brand-tile tile-y">Y</span>
+            <span class="brand-tile tile-plane"><i class="fa-solid fa-plane"></i></span>
+          </div>
+          <h1><i class="fa-solid fa-crosshairs" style="margin-right: 8px; color: var(--green-light);"></i>SKY STRIKE</h1>
+          <p class="tagline">Trò chơi Bắn Máy Bay Ma Trận 10x10 Online</p>
+        </div>
+
+        <!-- Mode Selector Cards (Code Cracker Style) -->
+        <div class="submode-selector">
+          <button class="submode-btn active" id="btn-1p">
+            <i class="fa-solid fa-robot mode-icon" style="color: #6aaa64;"></i>
+            <span class="mode-title">Chơi Đơn (AI)</span>
+            <span class="mode-desc">1 người • Đấu Bot AI</span>
+          </button>
+          <button class="submode-btn" id="btn-2p">
+            <i class="fa-solid fa-users mode-icon" style="color: #60a5fa;"></i>
+            <span class="mode-title">Đối Kháng 1v1</span>
+            <span class="mode-desc">2 người • Ghép Phòng</span>
+          </button>
+        </div>
+
+        <!-- Menu Action Buttons -->
+        <div class="menu-actions">
+          <button id="btn-start-quick" class="btn btn-primary btn-full"><i class="fa-solid fa-play"></i> Bắt đầu chơi ngay</button>
+        </div>
+
+        <!-- Rules Box (Code Cracker Style) -->
+        <div class="rules-box">
+          <p class="rules-title"><i class="fa-solid fa-circle-info"></i> Luật chơi Không Chiến 10x10</p>
+          <div class="rules-list">
+            <div class="rule-item">
+              <span class="rule-badge mode-fleet"><i class="fa-solid fa-plane"></i> 2 Máy bay</span>
+              <span>Mỗi máy bay gồm 8 ô (1 Đầu, 3 Cánh chính, 1 Thân, 3 Cánh đuôi)</span>
+            </div>
+            <div class="rule-item">
+              <span class="rule-badge mode-rotate"><i class="fa-solid fa-compass"></i> 4 Hướng</span>
+              <span>Bố trí xoay: <i class="fa-solid fa-arrow-up"></i> Lên, <i class="fa-solid fa-arrow-right"></i> Phải, <i class="fa-solid fa-arrow-down"></i> Xuống, <i class="fa-solid fa-arrow-left"></i> Trái</span>
+            </div>
+            <div class="rule-item">
+              <span class="rule-badge mode-headshot"><i class="fa-solid fa-bullseye"></i> Head-Shot</span>
+              <span><strong>Bắn trúng Ô ĐẦU</strong> sẽ <strong>HẠ GỤC NGAY MÁY BAY!</strong></span>
+            </div>
+          </div>
+          <p class="rules-note">Bàn cờ 10x10 • 30s/lượt • Tiêu diệt ĐẦU 2 máy bay đối thủ trước là THẮNG</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- LOBBY SCREEN (Code Cracker Style) -->
+    <div id="lobby-screen" class="screen">
+      <div class="panel">
+        <button class="link-back" id="btn-back-lobby"><i class="fa-solid fa-arrow-left"></i> Quay lại</button>
+        <h2><i class="fa-solid fa-users"></i> Đối kháng Online</h2>
+        <p class="panel-desc">Tạo phòng hoặc ghép ngẫu nhiên</p>
+
+        <div id="lobby-options">
+          <button id="btn-random-match" class="btn btn-primary btn-full" style="margin-bottom: 8px;">
+            <i class="fa-solid fa-bolt"></i> Ghép ngẫu nhiên
+          </button>
+          <button id="btn-create-room" class="btn btn-outline btn-full">
+            <i class="fa-solid fa-plus"></i> Tạo phòng thủ công
+          </button>
+
+          <div class="or-divider"><span>hoặc nhập mã phòng</span></div>
+          <div class="join-row">
+            <input type="text" id="input-room-code" class="input-code" placeholder="Mã phòng" maxlength="5" autocomplete="off" spellcheck="false">
+            <button id="btn-join-room" class="btn btn-primary"><i class="fa-solid fa-right-to-bracket"></i> Vào</button>
+          </div>
+        </div>
+
+        <div id="matchmaking-info" class="hidden">
+          <p class="waiting" style="margin-bottom: 1.2rem;"><span class="dot-pulse"></span> Đang tìm đối thủ...</p>
+          <button id="btn-cancel-match" class="btn btn-outline btn-full"><i class="fa-solid fa-xmark"></i> Hủy tìm trận</button>
+        </div>
+
+        <div id="room-info" class="hidden">
+          <p class="room-label">Mã phòng</p>
+          <div class="room-code" id="room-code-display">-----</div>
+
+          <div class="players-list-box" id="players-list-box"></div>
+
+          <div id="host-controls" class="hidden" style="margin-top: 1rem;">
+            <button id="btn-start-host" class="btn btn-primary btn-full"><i class="fa-solid fa-rocket"></i> Bắt đầu trận đấu</button>
+          </div>
+          <p class="waiting" id="waiting-host-start" style="margin-top: 0.8rem;"><span class="dot-pulse"></span> Chờ chủ phòng bắt đầu...</p>
+        </div>
+        <p id="lobby-error" class="error-msg hidden"></p>
+      </div>
+    </div>
+
+    <!-- PLACEMENT SCREEN -->
+    <div id="placement-screen" class="screen">
+      <div class="panel panel-wide">
+        <button class="link-back" id="btn-back-placement" style="float: left; margin-bottom: 0.5rem;"><i class="fa-solid fa-arrow-left"></i> Quay lại</button>
+        <div style="clear: both;"></div>
+        <h2><i class="fa-solid fa-plane-departure"></i> Bố trí Máy bay</h2>
+        <p class="panel-desc">Đặt 2 máy bay 8 ô độc lập trên bàn cờ 10x10 (Click chọn máy bay để chỉnh sửa)</p>
+
+        <div class="placement-layout">
+          <div class="board-frame">
+            <div class="labels-col">
+              <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span>
+              <span>F</span><span>G</span><span>H</span><span>I</span><span>J</span>
+            </div>
+            <div class="labels-content">
+              <div class="labels-row">
+                <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+                <span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+              </div>
+              <div id="placement-grid" class="airplane-grid"></div>
+            </div>
+          </div>
+
+          <div class="controls-panel">
+            <div class="selection-box">
+              <div class="plane-slot-item active" data-idx="0">
+                <span class="slot-title"><i class="fa-solid fa-plane" style="margin-right: 6px;"></i> Máy Bay #1</span>
+                <span class="slot-badge" id="slot-badge-0">Chưa đặt</span>
+              </div>
+              <div class="plane-slot-item" data-idx="1">
+                <span class="slot-title"><i class="fa-solid fa-plane" style="margin-right: 6px;"></i> Máy Bay #2</span>
+                <span class="slot-badge" id="slot-badge-1">Chưa đặt</span>
+              </div>
+            </div>
+
+            <div class="orient-selector">
+              <label class="lobby-label">Hướng Đỉnh Đầu Máy Bay:</label>
+              <div class="orient-grid">
+                <button class="btn btn-orient active" data-orient="UP"><i class="fa-solid fa-arrow-up"></i> Lên</button>
+                <button class="btn btn-orient" data-orient="RIGHT"><i class="fa-solid fa-arrow-right"></i> Phải</button>
+                <button class="btn btn-orient" data-orient="DOWN"><i class="fa-solid fa-arrow-down"></i> Xuống</button>
+                <button class="btn btn-orient" data-orient="LEFT"><i class="fa-solid fa-arrow-left"></i> Trái</button>
+              </div>
+            </div>
+
+            <div class="action-btn-group">
+              <button id="btn-auto-place" class="btn btn-outline btn-full" style="margin-bottom: 8px;">
+                <i class="fa-solid fa-shuffle"></i> Tự động xếp cả 2
+              </button>
+              <button id="btn-confirm-ships" class="btn btn-primary btn-full" disabled>
+                <i class="fa-solid fa-check"></i> Xác nhận bố trí
+              </button>
+            </div>
+            <p class="waiting hidden" id="waiting-opponent-ships" style="margin-top: 0.8rem;"><span class="dot-pulse"></span> Chờ đối thủ xếp máy bay...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GAME SCREEN (Code Cracker Style Header & HUD) -->
+    <div id="game-screen" class="screen">
+      <header class="game-bar">
+        <button class="link-back" id="btn-back-game" style="margin-bottom: 0;"><i class="fa-solid fa-arrow-left"></i> Thoát</button>
+        <div class="game-tags">
+          <span id="timer-label" class="tag tag-timer"><i class="fa-solid fa-stopwatch"></i> <span id="timer-sec">30</span>s</span>
+          <span id="mode-label" class="tag tag-mode">SKY STRIKE</span>
+          <span id="round-label" class="tag tag-alt">LƯỢT 1</span>
+        </div>
+      </header>
+
+      <div id="game-content" class="dual-grid-container">
+        <!-- MY FLEET BOARD -->
+        <div class="board-section">
+          <div class="board-label">
+            <i class="fa-solid fa-shield-halved"></i> Đội Máy Bay Bạn (<span id="my-fleet-status">2/2 Sống</span>)
+          </div>
+          <div class="board-frame">
+            <div class="labels-col">
+              <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span>
+              <span>F</span><span>G</span><span>H</span><span>I</span><span>J</span>
+            </div>
+            <div class="labels-content">
+              <div class="labels-row">
+                <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+                <span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+              </div>
+              <div id="my-fleet-grid" class="airplane-grid"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RADAR ATTACK BOARD -->
+        <div class="board-section">
+          <div class="board-label active-turn">
+            <i class="fa-solid fa-crosshairs"></i> Radar Tấn Công (<span id="enemy-fleet-status">2/2 Target</span>)
+          </div>
+          <div class="board-frame">
+            <div class="labels-col">
+              <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span>
+              <span>F</span><span>G</span><span>H</span><span>I</span><span>J</span>
+            </div>
+            <div class="labels-content">
+              <div class="labels-row">
+                <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+                <span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+              </div>
+              <div id="attack-grid" class="airplane-grid interactive"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="input-area">
+        <div id="turn-timer-banner" class="turn-timer-banner">
+          <i class="fa-solid fa-hourglass-half"></i> Thời gian lượt: <strong id="turn-timer-count">30</strong>s
+        </div>
+        <div id="turn-indicator">
+          <p class="waiting"><span class="dot-pulse"></span> <span id="turn-text">Lượt của bạn - Click Radar để ngắm bắn vào ĐẦU máy bay!</span></p>
+        </div>
+        <p id="game-error" class="error-msg hidden"></p>
+      </div>
+    </div>
+
+    <!-- RESULT SCREEN -->
+    <div id="result-modal" class="modal-overlay hidden">
+      <div class="panel result-panel">
+        <div id="result-icon-box" class="result-emoji"></div>
+        <h2 id="result-title"></h2>
+        <p id="result-message" class="panel-desc"></p>
+        <button id="btn-play-again" class="btn btn-primary btn-full" style="margin-top: 1rem;">
+          <i class="fa-solid fa-rotate-right"></i> Chơi lại
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
